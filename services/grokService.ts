@@ -1,16 +1,18 @@
 import { Dataset } from "../types";
 
-// DIRECTLY ASSIGNED KEY FOR PROTOTYPE
-const API_KEY = "REPLACE WITH YOUR API AI KEY";
+// UPDATED: Now pulls from the .env file using Vite's env object
+const API_KEY = import.meta.env.VITE_GROK_API_KEY;
 
 export const generateResearchIdeas = async (dataset: Dataset): Promise<string> => {
   if (!API_KEY) {
     return `
     **AI Generated Research Ideas (Mock Mode - Key Missing):**
-    
+     
     1.  **Longitudinal Analysis:** Investigate the correlation between "${dataset.title}" and economic indicators.
     2.  **Comparative Study:** Compare ${dataset.category} trends in ${dataset.region} versus global averages.
     3.  **Predictive Modeling:** Use machine learning to forecast future trends based on the historical data.
+    
+    *(Note: To enable real AI generation, add VITE_GROK_API_KEY to your .env file)*
     `;
   }
 
@@ -32,8 +34,7 @@ export const generateResearchIdeas = async (dataset: Dataset): Promise<string> =
             content: `Analyze this dataset:\nTitle: ${dataset.title}\nDescription: ${dataset.description}\nCategory: ${dataset.category}\nTags: ${dataset.tags.join(', ')}`
           }
         ],
-        // Updated model name to the standard public beta model to fix 404
-        model: "grok-4-1-fast-reasoning", 
+        model: "grok-beta", // Using the standard beta model alias which is often more stable
         stream: false,
         temperature: 0
       })
@@ -50,7 +51,7 @@ export const generateResearchIdeas = async (dataset: Dataset): Promise<string> =
 
   } catch (error: any) {
     console.error("AI Service Error:", error);
-    
+     
     // Specific check for CORS/Network errors common in browser-only apps
     if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
         return `
