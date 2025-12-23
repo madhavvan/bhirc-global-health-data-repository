@@ -34,7 +34,7 @@ export const generateResearchIdeas = async (dataset: Dataset): Promise<string> =
             content: `Analyze this dataset:\nTitle: ${dataset.title}\nDescription: ${dataset.description}\nCategory: ${dataset.category}\nTags: ${dataset.tags.join(', ')}`
           }
         ],
-        model: "grok-beta", // Using the standard beta model alias which is often more stable
+        model: "grok-4-1-fast-reasoning", // Using the standard beta model alias which is often more stable
         stream: false,
         temperature: 0
       })
